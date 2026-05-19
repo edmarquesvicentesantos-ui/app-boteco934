@@ -1,1 +1,235 @@
-<!DOCTYPE html><html lang="pt-br"><head><meta charset="UTF-8"><title>Caixa</title><link rel="stylesheet" href="style.css"></head><body><div class="header"><h1>💵 Caixa</h1></div><div class="container"><div id="menu"></div><div class="card"><h2>Movimento de caixa</h2><div class="form"><input id="tipo" placeholder="Tipo: Abertura, Sangria, Suprimento, Fechamento"><input id="operador" placeholder="Operador"><input id="valor" type="number" placeholder="Valor"><input id="obs" placeholder="Observação"></div><button onclick="salvar()">Salvar movimento</button></div><div class="tablebox"><table><thead><tr><th>Data</th><th>Tipo</th><th>Operador</th><th>Valor</th><th>Obs</th></tr></thead><tbody id="body"></tbody></table></div></div><script src="app.js"></script><script>document.getElementById('menu').innerHTML=menu();function salvar(){let c=get('caixa');c.push({data:new Date().toISOString(),tipo:tipo.value,operador:operador.value,valor:Number(valor.value||0),obs:obs.value});set('caixa',c);render()}function render(){body.innerHTML=get('caixa').slice().reverse().map(x=>'<tr><td>'+new Date(x.data).toLocaleString('pt-BR')+'</td><td>'+x.tipo+'</td><td>'+x.operador+'</td><td>'+money(x.valor)+'</td><td>'+x.obs+'</td></tr>').join('')}render()</script></body></html>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Caixa Boteco 934</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+.resumo{
+
+background:#111;
+padding:20px;
+border-radius:20px;
+margin-top:20px;
+
+}
+
+.linha{
+
+display:flex;
+justify-content:space-between;
+padding:10px;
+border-bottom:1px solid #333;
+
+}
+
+.valor{
+
+color:#f1c443;
+font-weight:bold;
+
+font-size:22px;
+
+}
+
+.lucro{
+
+background:#0f5132;
+padding:15px;
+border-radius:15px;
+font-size:28px;
+margin-top:20px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>💰 Caixa do Dia</h1>
+
+
+<div class="resumo">
+
+<div class="linha">
+PIX
+<span class="valor">
+R$ <span id="pix">0</span>
+</span>
+</div>
+
+
+<div class="linha">
+Crédito
+<span class="valor">
+R$ <span id="credito">0</span>
+</span>
+</div>
+
+
+<div class="linha">
+Débito
+<span class="valor">
+R$ <span id="debito">0</span>
+</span>
+</div>
+
+
+<div class="linha">
+Dinheiro
+<span class="valor">
+R$ <span id="dinheiro">0</span>
+</span>
+</div>
+
+
+<div class="linha">
+Pendura
+<span class="valor">
+R$ <span id="pendura">0</span>
+</span>
+</div>
+
+</div>
+
+
+<div class="resumo">
+
+<h2>Despesas</h2>
+
+<input
+id="despesa"
+placeholder="Ex: gelo, gasolina">
+
+<input
+id="valorDespesa"
+type="number"
+placeholder="valor">
+
+<button onclick="adicionarDespesa()">
+
+Adicionar
+
+</button>
+
+
+<div id="lista"></div>
+
+</div>
+
+
+
+<div class="lucro">
+
+💵 Lucro no bolso:
+
+R$ <span id="lucro">
+
+0.00
+
+</span>
+
+</div>
+
+
+<button
+class="btn-sec"
+onclick="location='index.html'">
+
+Voltar
+
+</button>
+
+
+<script>
+
+let despesas=[]
+
+function adicionarDespesa(){
+
+let nome=
+despesa.value
+
+let valor=
+parseFloat(
+valorDespesa.value
+)
+
+despesas.push({
+
+nome,
+valor
+
+})
+
+render()
+
+}
+
+
+function render(){
+
+let html=""
+
+let total=0
+
+
+despesas.forEach(d=>{
+
+total+=d.valor
+
+
+html+=`
+
+<div class=linha>
+
+${d.nome}
+
+R$ ${d.valor}
+
+</div>
+
+`
+
+})
+
+lista.innerHTML=
+html
+
+
+let vendas=
+
+parseFloat(
+pix.innerHTML
+)+
+
+parseFloat(
+credito.innerHTML
+)+
+
+parseFloat(
+debito.innerHTML
+)+
+
+parseFloat(
+dinheiro.innerHTML
+)
+
+
+lucro.innerHTML=
+
+(vendas-total)
+.toFixed(2)
+
+}
+
+</script>
+
+</body>
+</html>
